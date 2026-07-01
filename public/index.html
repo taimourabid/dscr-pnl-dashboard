@@ -44,10 +44,12 @@ section{margin-bottom:32px}
 .chart-wrap{position:relative;height:240px}
 
 /* TABLE */
-.tbl-wrap{overflow-x:auto}
+.tbl-wrap{overflow-x:auto;background:var(--surface);border-radius:14px;border:1px solid var(--border)}
 table{width:100%;border-collapse:collapse;font-size:.87rem}
 thead th{background:var(--surface2);color:var(--muted);font-size:.74rem;text-transform:uppercase;letter-spacing:.07em;padding:10px 14px;text-align:left;border-bottom:1px solid var(--border)}
-tbody tr{border-bottom:1px solid var(--border)}
+thead th:first-child{border-radius:14px 0 0 0}
+thead th:last-child{border-radius:0 14px 0 0}
+tbody tr{border-bottom:1px solid var(--border);background:var(--surface)}
 tbody tr:hover{background:rgba(255,255,255,.03)}
 td{padding:10px 14px;color:var(--text)}
 td.amt{font-weight:700;color:var(--accentlt)}
