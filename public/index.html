@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>DSCR P&L — June 2026</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
+<style>
+:root{--bg:#dce9e3;--surface:#2c2a24;--surface2:#38362f;--border:#48463e;--text:#f0ece6;--muted:#9a9588;--accent:#c49535;--accentlt:#e8c06b;--red:#d95f5f;--green:#5cb87a}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);font-family:'Inter',system-ui,sans-serif;color:var(--text);min-height:100vh;padding:0 0 60px}
+h1,h2,h3{font-weight:700}
+
+/* HEADER */
+.hdr{background:var(--surface);padding:18px 28px;display:flex;align-items:center;justify-content:space-between;border-bottom:2px solid var(--accent)}
+.hdr-title{display:flex;flex-direction:column}
+.hdr-title h1{font-size:1.3rem;color:var(--accentlt);letter-spacing:.04em}
+.hdr-title span{font-size:.78rem;color:var(--muted);margin-top:2px}
+.hdr-right{display:flex;gap:10px;align-items:center}
+.edit-btn{background:var(--accent);color:#1a1812;border:none;border-radius:8px;padding:8px 18px;font-size:.85rem;font-weight:700;cursor:pointer;transition:.2s}
+.edit-btn:hover{background:var(--accentlt)}
+body.em .edit-btn{background:var(--red);color:#fff}
+
+/* MAIN */
+.main{max-width:1280px;margin:0 auto;padding:28px 20px}
+section{margin-bottom:32px}
+.section-title{font-size:.9rem;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);margin-bottom:14px;padding-bottom:6px;border-bottom:1px solid var(--border)}
+
+/* KPI */
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}
+.kpi-card{background:var(--surface);border-radius:14px;padding:22px 24px;border:1px solid var(--border)}
+.kpi-label{font-size:.78rem;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-bottom:8px}
+.kpi-value{font-size:1.9rem;font-weight:800;letter-spacing:-.01em}
+.kpi-value.pos{color:var(--green)}
+.kpi-value.neg{color:var(--red)}
+.kpi-value.acc{color:var(--accentlt)}
+.kpi-sub{font-size:.77rem;color:var(--muted);margin-top:4px}
+
+/* CHARTS */
+.charts-row{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+@media(max-width:700px){.charts-row{grid-template-columns:1fr}}
+.chart-card{background:var(--surface);border-radius:14px;padding:22px 24px;border:1px solid var(--border)}
+.chart-card h3{font-size:.88rem;color:var(--muted);margin-bottom:16px;text-transform:uppercase;letter-spacing:.07em}
+.chart-wrap{position:relative;height:240px}
+
+/* TABLE */
+.tbl-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:.87rem}
+thead th{background:var(--surface2);color:var(--muted);font-size:.74rem;text-transform:uppercase;letter-spacing:.07em;padding:10px 14px;text-align:left;border-bottom:1px solid var(--border)}
+tbody tr{border-bottom:1px solid var(--border)}
+tbody tr:hover{background:rgba(255,255,255,.03)}
+td{padding:10px 14px;color:var(--text)}
+td.amt{font-weight:700;color:var(--accentlt)}
+td.neg-amt{font-weight:700;color:var(--red)}
+td.pos-amt{font-weight:700;color:var(--green)}
+.cat-badge{display:inline-block;padding:2px 10px;border-radius:20px;font-size:.72rem;font-weight:600;background:rgba(196,149,53,.18);color:var(--accentlt)}
+
+/* EXPENSE CARDS */
+.exp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px}
+.exp-card{background:var(--surface);border-radius:14px;border:1px solid var(--border);overflow:hidden}
+.exp-card-hdr{background:var(--surface2);padding:12px 16px;display:flex;align-items:center;justify-content:space-between}
+.exp-card-hdr h3{font-size:.88rem;font-weight:700;color:var(--accentlt)}
+.exp-total{font-size:.82rem;font-weight:700;color:var(--accent)}
+.exp-items{padding:10px 0}
+.exp-item{display:flex;align-items:center;justify-content:space-between;padding:6px 16px;font-size:.84rem}
+.exp-item:hover{background:rgba(255,255,255,.03)}
+.exp-item-name{color:var(--text);flex:1}
+.exp-item-amt{color:var(--muted);font-weight:600;margin-left:12px}
+
+/* EDIT-ONLY */
+.edit-only{display:none}
+body.em .edit-only{display:flex}
+.del-btn{background:none;border:1px solid var(--red);color:var(--red);border-radius:6px;padding:3px 10px;font-size:.72rem;cursor:pointer;white-space:nowrap;margin-left:8px;transition:.15s}
+.del-btn:hover{background:var(--red);color:#fff}
+.add-row{padding:10px 16px;border-top:1px dashed var(--border)}
+.add-row button{background:var(--accent);color:#1a1812;border:none;border-radius:7px;padding:5px 14px;font-size:.78rem;font-weight:700;cursor:pointer;width:100%;transition:.2s}
+.add-row button:hover{background:var(--accentlt)}
+.add-top-btn{background:var(--accent);color:#1a1812;border:none;border-radius:8px;padding:7px 16px;font-size:.82rem;font-weight:700;cursor:pointer;margin-bottom:14px;transition:.2s}
+.add-top-btn:hover{background:var(--accentlt)}
+
+/* MODAL */
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:100;align-items:center;justify-content:center}
+.modal-bg.open{display:flex}
+.modal{background:var(--surface);border-radius:16px;padding:28px 30px;width:100%;max-width:420px;border:1px solid var(--border)}
+.modal h2{font-size:1rem;margin-bottom:20px;color:var(--accentlt)}
+.modal label{display:block;font-size:.8rem;color:var(--muted);margin-bottom:4px;margin-top:14px}
+.modal input,.modal select{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:9px 12px;color:var(--text);font-size:.88rem;outline:none}
+.modal input:focus,.modal select:focus{border-color:var(--accent)}
+.modal-actions{display:flex;gap:10px;margin-top:20px}
+.modal-actions button{flex:1;padding:10px;border:none;border-radius:8px;font-size:.88rem;font-weight:700;cursor:pointer;transition:.2s}
+.btn-cancel{background:var(--surface2);color:var(--muted)}
+.btn-cancel:hover{color:var(--text)}
+.btn-save{background:var(--accent);color:#1a1812}
+.btn-save:hover{background:var(--accentlt)}
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <div class="hdr-title">
+    <h1>DSCR P&L Dashboard</h1>
+    <span>June 2026 · QuickBooks Export</span>
+  </div>
+  <div class="hdr-right">
+    <button class="edit-btn" onclick="toggleEdit()">Edit Mode</button>
+  </div>
+</div>
+
+<div class="main">
+
+  <!-- KPIs -->
+  <section>
+    <div class="section-title">Overview</div>
+    <div class="kpi-grid" id="kpi-grid"></div>
+  </section>
+
+  <!-- Charts -->
+  <section>
+    <div class="section-title">Breakdown</div>
+    <div class="charts-row">
+      <div class="chart-card">
+        <h3>Revenue by Category</h3>
+        <div class="chart-wrap"><canvas id="chartRevCat"></canvas></div>
+      </div>
+      <div class="chart-card">
+        <h3>Expenses by Category</h3>
+        <div class="chart-wrap"><canvas id="chartExpCat"></canvas></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Money In -->
+  <section>
+    <div class="section-title">Money In</div>
+    <div class="edit-only" style="margin-bottom:12px">
+      <button class="add-top-btn" onclick="openAddIncome()">+ Add Income</button>
+    </div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr>
+          <th>Date</th><th>Description</th><th>Category</th><th>Amount</th>
+          <th class="edit-only">Action</th>
+        </tr></thead>
+        <tbody id="income-tbody"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Expenses -->
+  <section>
+    <div class="section-title">Expenses</div>
+    <div class="edit-only" style="margin-bottom:12px">
+      <button class="add-top-btn" onclick="openAddCategory()">+ Add Category</button>
+    </div>
+    <div class="exp-grid" id="exp-grid"></div>
+  </section>
+
+</div>
+
+<!-- Modal: Add Income -->
+<div class="modal-bg" id="modal-income">
+  <div class="modal">
+    <h2>Add Income Entry</h2>
+    <label>Date</label><input type="text" id="in-date" placeholder="06/01">
+    <label>Description</label><input type="text" id="in-name" placeholder="e.g. Title Company">
+    <label>Category</label>
+    <select id="in-cat">
+      <option>Sales</option><option>Services</option><option>Other Income</option><option>Transfer</option><option>Other</option>
+    </select>
+    <label>Amount ($)</label><input type="number" id="in-amt" placeholder="0.00" step="0.01">
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModals()">Cancel</button>
+      <button class="btn-save" onclick="saveIncome()">Add</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Add Category -->
+<div class="modal-bg" id="modal-cat">
+  <div class="modal">
+    <h2>Add Expense Category</h2>
+    <label>Category Name</label><input type="text" id="cat-name" placeholder="e.g. Legal Fees">
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModals()">Cancel</button>
+      <button class="btn-save" onclick="saveCategory()">Add</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Add Item -->
+<div class="modal-bg" id="modal-item">
+  <div class="modal">
+    <h2>Add Expense Item</h2>
+    <input type="hidden" id="item-cat-id">
+    <label>Description</label><input type="text" id="item-name" placeholder="e.g. Vendor Name">
+    <label>Amount ($)</label><input type="number" id="item-amt" placeholder="0.00" step="0.01">
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModals()">Cancel</button>
+      <button class="btn-save" onclick="saveItem()">Add</button>
+    </div>
+  </div>
+</div>
+
+<script>
+let state = null;
+let revChart = null, expChart = null;
+
+const $ = id => document.getElementById(id);
+const fmt = n => '$' + Math.abs(n).toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2});
+
+async function api(method, url, body) {
+  const r = await fetch(url, {
+    method,
+    headers: body ? {'Content-Type':'application/json'} : {},
+    body: body ? JSON.stringify(body) : undefined
+  });
+  return r.json();
+}
+
+async function load() {
+  state = await api('GET', '/api/data');
+  renderAll();
+}
+
+function der() {
+  const moneyIn = (state.moneyIn || []).filter(t => t.category !== 'Transfer');
+  const gross = moneyIn.reduce((s, t) => s + t.amount, 0);
+  const allItems = (state.expenses || []).flatMap(e => e.items || []);
+  const totalExp = allItems.reduce((s, i) => s + i.amount, 0);
+  const net = gross - totalExp;
+  return { moneyIn, gross, totalExp, net };
+}
+
+function renderAll() {
+  const d = der();
+  rKPI(d);
+  rCharts(d);
+  rTable();
+  rExpenses();
+}
+
+function rKPI(d) {
+  const netClass = d.net >= 0 ? 'pos' : 'neg';
+  const netSign  = d.net >= 0 ? '+' : '-';
+  $('kpi-grid').innerHTML = `
+    <div class="kpi-card">
+      <div class="kpi-label">Gross Revenue</div>
+      <div class="kpi-value acc">${fmt(d.gross)}</div>
+      <div class="kpi-sub">Excluding internal transfers</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Total Expenses</div>
+      <div class="kpi-value neg">${fmt(d.totalExp)}</div>
+      <div class="kpi-sub">All categories combined</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Net P&amp;L</div>
+      <div class="kpi-value ${netClass}">${netSign}${fmt(Math.abs(d.net))}</div>
+      <div class="kpi-sub">Revenue minus expenses</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Transactions</div>
+      <div class="kpi-value acc">${d.moneyIn.length}</div>
+      <div class="kpi-sub">Income entries this month</div>
+    </div>
+  `;
+}
+
+const COLORS = ['#c49535','#5cb87a','#7ab8d4','#d95f5f','#9a7dd4','#e87c4a','#5bb8a0','#d4bb7a','#8db87a','#d47ab8'];
+
+function rCharts(d) {
+  // Revenue by category
+  const catMap = {};
+  d.moneyIn.forEach(t => { catMap[t.category] = (catMap[t.category]||0) + t.amount; });
+  const revLabels = Object.keys(catMap);
+  const revData   = revLabels.map(k => catMap[k]);
+
+  if (revChart) revChart.destroy();
+  revChart = new Chart($('chartRevCat'), {
+    type: 'doughnut',
+    data: { labels: revLabels, datasets: [{ data: revData, backgroundColor: COLORS, borderWidth: 2, borderColor: '#2c2a24' }] },
+    options: { plugins: { legend: { labels: { color: '#f0ece6', font: { size: 12 } } } }, cutout: '60%' }
+  });
+
+  // Expenses by category
+  const expLabels = (state.expenses||[]).map(e => e.label);
+  const expData   = (state.expenses||[]).map(e => (e.items||[]).reduce((s,i) => s+i.amount, 0));
+
+  if (expChart) expChart.destroy();
+  expChart = new Chart($('chartExpCat'), {
+    type: 'bar',
+    data: { labels: expLabels, datasets: [{ label: 'Expenses', data: expData, backgroundColor: COLORS, borderRadius: 6 }] },
+    options: {
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { ticks: { color: '#9a9588', font: { size: 11 } }, grid: { color: 'rgba(255,255,255,.05)' } },
+        y: { ticks: { color: '#9a9588', callback: v => '$' + v.toLocaleString() }, grid: { color: 'rgba(255,255,255,.05)' } }
+      }
+    }
+  });
+}
+
+function rTable() {
+  const tbody = $('income-tbody');
+  const inEditMode = document.body.classList.contains('em');
+  tbody.innerHTML = (state.moneyIn||[]).map(t => {
+    const isTransfer = t.category === 'Transfer';
+    return `<tr>
+      <td>${t.date}</td>
+      <td>${t.name}</td>
+      <td><span class="cat-badge">${t.category}</span></td>
+      <td class="${isTransfer ? 'amt' : 'pos-amt'}">${fmt(t.amount)}</td>
+      <td class="edit-only" style="${inEditMode?'':'display:none'}">
+        <button class="del-btn" onclick="deleteIncome('${t.id}')">Delete</button>
+      </td>
+    </tr>`;
+  }).join('');
+  // show/hide action column header
+  document.querySelectorAll('thead th.edit-only').forEach(th => {
+    th.style.display = inEditMode ? '' : 'none';
+  });
+}
+
+function rExpenses() {
+  const inEditMode = document.body.classList.contains('em');
+  $('exp-grid').innerHTML = (state.expenses||[]).map(cat => {
+    const total = (cat.items||[]).reduce((s,i) => s+i.amount, 0);
+    const items = (cat.items||[]).map(item => `
+      <div class="exp-item">
+        <span class="exp-item-name">${item.name}</span>
+        <span class="exp-item-amt">${fmt(item.amount)}</span>
+        <button class="del-btn edit-only" style="${inEditMode?'':'display:none'}" onclick="deleteItem('${cat.id}','${item.id}')">Del</button>
+      </div>`).join('');
+    const addBtn = inEditMode ? `<div class="add-row edit-only" style="display:${inEditMode?'block':'none'}">
+      <button onclick="openAddItem('${cat.id}')">+ Add Item</button>
+    </div>` : '';
+    const delCat = inEditMode ? `<button class="del-btn edit-only" style="display:${inEditMode?'flex':'none'}" onclick="deleteCategory('${cat.id}')">Del</button>` : '';
+    return `<div class="exp-card">
+      <div class="exp-card-hdr">
+        <h3>${cat.label}</h3>
+        <div style="display:flex;align-items:center;gap:8px">
+          <span class="exp-total">${fmt(total)}</span>
+          ${delCat}
+        </div>
+      </div>
+      <div class="exp-items">${items}</div>
+      ${addBtn}
+    </div>`;
+  }).join('');
+}
+
+// Edit mode
+function toggleEdit() {
+  document.body.classList.toggle('em');
+  const on = document.body.classList.contains('em');
+  document.querySelector('.edit-btn').textContent = on ? 'Exit Edit' : 'Edit Mode';
+  renderAll();
+}
+
+// Income CRUD
+function openAddIncome() { closeModals(); $('modal-income').classList.add('open'); }
+async function saveIncome() {
+  const date = $('in-date').value.trim();
+  const name = $('in-name').value.trim();
+  const cat  = $('in-cat').value;
+  const amt  = parseFloat($('in-amt').value);
+  if (!name || isNaN(amt)) return alert('Fill in all fields');
+  await api('POST', '/api/money-in', { date, name, category: cat, amount: amt });
+  closeModals();
+  await load();
+}
+async function deleteIncome(id) {
+  if (!confirm('Delete this income entry?')) return;
+  await api('DELETE', '/api/money-in/' + id);
+  await load();
+}
+
+// Category CRUD
+function openAddCategory() { closeModals(); $('modal-cat').classList.add('open'); }
+async function saveCategory() {
+  const label = $('cat-name').value.trim();
+  if (!label) return alert('Enter a category name');
+  await api('POST', '/api/expenses', { label });
+  closeModals();
+  await load();
+}
+async function deleteCategory(id) {
+  if (!confirm('Delete this entire category and all items?')) return;
+  await api('DELETE', '/api/expenses/' + id);
+  await load();
+}
+
+// Item CRUD
+function openAddItem(catId) {
+  closeModals();
+  $('item-cat-id').value = catId;
+  $('item-name').value = '';
+  $('item-amt').value = '';
+  $('modal-item').classList.add('open');
+}
+async function saveItem() {
+  const catId = $('item-cat-id').value;
+  const name  = $('item-name').value.trim();
+  const amt   = parseFloat($('item-amt').value);
+  if (!name || isNaN(amt)) return alert('Fill in all fields');
+  await api('POST', '/api/expenses/' + catId + '/items', { name, amount: amt });
+  closeModals();
+  await load();
+}
+async function deleteItem(catId, itemId) {
+  if (!confirm('Delete this expense item?')) return;
+  await api('DELETE', '/api/expenses/' + catId + '/items/' + itemId);
+  await load();
+}
+
+function closeModals() {
+  document.querySelectorAll('.modal-bg').forEach(m => m.classList.remove('open'));
+}
+document.querySelectorAll('.modal-bg').forEach(m => m.addEventListener('click', e => { if(e.target===m) closeModals(); }));
+
+load();
+</script>
+</body>
+</html>

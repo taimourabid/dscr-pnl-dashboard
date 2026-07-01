@@ -1,0 +1,77 @@
+{
+  "moneyIn": [
+    { "id": "i01", "date": "06/01", "name": "Advantage Title LLC",          "category": "Sales",       "amount": 2695.00 },
+    { "id": "i02", "date": "06/01", "name": "Advantage Title LLC",          "category": "Sales",       "amount": 2800.00 },
+    { "id": "i03", "date": "06/02", "name": "Mercury Savings Transfer",     "category": "Transfer",    "amount": 3477.00 },
+    { "id": "i04", "date": "06/11", "name": "Scott M Kelly",                "category": "Sales",       "amount": 3100.00 },
+    { "id": "i05", "date": "06/12", "name": "American Title Solutions",     "category": "Sales",       "amount": 3552.00 },
+    { "id": "i06", "date": "06/15", "name": "Mercury IO Cashback",          "category": "Other Income","amount": 16.49   },
+    { "id": "i07", "date": "06/22", "name": "Constructive Loans LLC",       "category": "Sales",       "amount": 1012.50 },
+    { "id": "i08", "date": "06/29", "name": "Guardian Title Guaranty",      "category": "Sales",       "amount": 9000.00 },
+    { "id": "i09", "date": "06/29", "name": "Amazon",                       "category": "Other",       "amount": 3.23    },
+    { "id": "i10", "date": "06/29", "name": "Amazon",                       "category": "Other",       "amount": 0.29    }
+  ],
+  "expenses": [
+    { "id": "e1", "label": "Payroll", "items": [
+      { "id": "e1i1", "name": "Yazan Ghezlan",         "amount": 5350.00 },
+      { "id": "e1i2", "name": "Austin Atkins (×2)",    "amount": 2510.40 },
+      { "id": "e1i3", "name": "Sarah Lippert",         "amount": 1099.00 },
+      { "id": "e1i4", "name": "Payroll (Jun 15)",      "amount": 1098.44 },
+      { "id": "e1i5", "name": "Stacey Chehardy (×2)", "amount": 1350.00 }
+    ]},
+    { "id": "e2", "label": "Working Capital", "items": [
+      { "id": "e2i1", "name": "Mercury (Jun 2)", "amount": 5000.00 }
+    ]},
+    { "id": "e3", "label": "Software & Apps", "items": [
+      { "id": "e3i1",  "name": "Intelleq LLC (×2)",  "amount": 1300.00 },
+      { "id": "e3i2",  "name": "Zapier",             "amount": 656.85  },
+      { "id": "e3i3",  "name": "QuickBooks",         "amount": 535.58  },
+      { "id": "e3i4",  "name": "Google",             "amount": 451.73  },
+      { "id": "e3i5",  "name": "Typeform",           "amount": 129.00  },
+      { "id": "e3i6",  "name": "Anthropic Claude",   "amount": 109.75  },
+      { "id": "e3i7",  "name": "Martin & Martin",    "amount": 49.00   },
+      { "id": "e3i8",  "name": "Phantomwriter.io",   "amount": 49.00   },
+      { "id": "e3i9",  "name": "Twilio",             "amount": 40.09   },
+      { "id": "e3i10", "name": "Apple (×2)",         "amount": 57.04   },
+      { "id": "e3i11", "name": "Liveplan",           "amount": 20.00   },
+      { "id": "e3i12", "name": "GoDaddy (×2)",       "amount": 30.95   },
+      { "id": "e3i13", "name": "Zoom",               "amount": 18.69   }
+    ]},
+    { "id": "e4", "label": "Other", "items": [
+      { "id": "e4i1", "name": "Arive",           "amount": 614.49 },
+      { "id": "e4i2", "name": "Premium Bureau In","amount": 326.51 },
+      { "id": "e4i3", "name": "Gorilla Mind",    "amount": 53.90  },
+      { "id": "e4i4", "name": "Experian",        "amount": 26.24  },
+      { "id": "e4i5", "name": "Moneysensei.com", "amount": 5.97   },
+      { "id": "e4i6", "name": "Mercury",         "amount": 5.49   }
+    ]},
+    { "id": "e5", "label": "Meals", "items": [
+      { "id": "e5i1", "name": "Sauce Elote",         "amount": 213.09 },
+      { "id": "e5i2", "name": "Tiagos Tacos",        "amount": 177.03 },
+      { "id": "e5i3", "name": "Raising Cane Chicken","amount": 168.05 }
+    ]},
+    { "id": "e6", "label": "Marketing", "items": [
+      { "id": "e6i1", "name": "Webflow (×2)", "amount": 106.46 },
+      { "id": "e6i2", "name": "LinkedIn",     "amount": 76.81  },
+      { "id": "e6i3", "name": "SquareSpace",  "amount": 43.90  },
+      { "id": "e6i4", "name": "Shutterstock", "amount": 31.83  },
+      { "id": "e6i5", "name": "Canva",        "amount": 15.00  }
+    ]},
+    { "id": "e7", "label": "Subscriptions", "items": [
+      { "id": "e7i1", "name": "Calendly",       "amount": 92.19 },
+      { "id": "e7i2", "name": "Indeed",         "amount": 81.00 },
+      { "id": "e7i3", "name": "Upwork (×2)",    "amount": 52.50 },
+      { "id": "e7i4", "name": "Netflix",        "amount": 21.94 },
+      { "id": "e7i5", "name": "IdentityIQ",     "amount": 16.99 }
+    ]},
+    { "id": "e8", "label": "Utilities", "items": [
+      { "id": "e8i1", "name": "T-Mobile", "amount": 165.84 }
+    ]},
+    { "id": "e9", "label": "Travel", "items": [
+      { "id": "e9i1", "name": "VIP Pedicabs", "amount": 155.00 }
+    ]},
+    { "id": "e10", "label": "Processing Fees", "items": [
+      { "id": "e10i1", "name": "Square / Stripe", "amount": 38.11 }
+    ]}
+  ]
+}

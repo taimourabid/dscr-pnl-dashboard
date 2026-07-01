@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>DSCR Department — June 2026 P&L</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--bg:#dce9e3;--surface:#2c2a24;--surface2:#38362f;--border:#48463e;--text:#f0ece6;--muted:#9a9588;--accent:#c49535;--accentlt:#e8c06b;--red:#d95f5f;--green:#5cb87a}
+    body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:14px;line-height:1.5}
+    header{background:var(--surface);border-bottom:1px solid var(--border);padding:18px 32px;display:flex;align-items:center;justify-content:space-between}
+    .logo{font-size:20px;font-weight:800;color:var(--text)}.logo span{color:var(--accent)}
+    .badge{background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:5px 14px;font-size:11px;font-weight:700;letter-spacing:1px;color:var(--muted);text-transform:uppercase}
+    .container{max-width:1400px;margin:0 auto;padding:32px}
+    .slabel{font-size:11px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:var(--accent);margin-bottom:14px}
+    .card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:24px}
+    .ctitle{font-size:12px;font-weight:700;color:var(--text);margin-bottom:18px}
+    .kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(185px,1fr));gap:14px;margin-bottom:28px}
+    .g21{display:grid;grid-template-columns:2fr 1fr;gap:14px;margin-bottom:26px}
+    .g11{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:26px}
+    .g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:26px}
+    .kpi{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px 22px}
+    .klbl{font-size:10px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:var(--accent);margin-bottom:8px}
+    .kval{font-size:26px;font-weight:800;color:var(--text)}
+    .ksub{font-size:11px;color:var(--muted);margin-top:4px}
+    .kpi.ka{border-color:var(--accent)}.kpi.ka .kval{color:var(--accentlt)}
+    .kpi.kg{border-color:var(--green)}.kpi.kg .kval{color:var(--green)}
+    .kpi.kr{border-color:var(--red)}.kpi.kr .kval{color:var(--red)}
+    .kpi.kw{border-color:#f97316}.kpi.kw .kval{color:#f97316}
+    .pnl-sec{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:22px 24px}
+    .pnl-sec.profit{border-color:var(--red)}
+    .pi{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid var(--border);font-size:13px}
+    .pi:last-child{border-bottom:none}
+    .pi.tot{padding-top:12px;border-top:1px solid var(--border);border-bottom:none;font-weight:800;font-size:14px;margin-top:4px}
+    .pos{color:var(--green);font-weight:700}.neg{color:var(--red);font-weight:700}.neu{color:var(--accentlt);font-weight:700}
+    .exp-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:26px}
+    .ec{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px 18px}
+    .eclbl{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--accent);margin-bottom:5px}
+    .ectot{font-size:20px;font-weight:800}
+    .eitems{margin-top:8px;font-size:11px;color:var(--muted);line-height:1.9}
+    .erow{display:flex;justify-content:space-between;gap:8px}
+    .ename{flex:1}.eamt{font-variant-numeric:tabular-nums;white-space:nowrap}
+    .table-wrap{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:28px}
+    .thdr{display:flex;justify-content:space-between;align-items:center;padding:18px 22px 14px;border-bottom:1px solid var(--border)}
+    table{width:100%;border-collapse:collapse}
+    thead th{background:var(--surface2);padding:9px 16px;font-size:10px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:var(--accent);text-align:left}
+    tbody tr{border-bottom:1px solid var(--border);transition:background .1s}
+    tbody tr:last-child{border-bottom:none}
+    tbody tr:hover{background:var(--surface2)}
+    td{padding:9px 16px;font-size:13px}
+    .tag{display:inline-block;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:700}
+    .tin{background:rgba(92,184,122,.15);color:var(--green)}
+    .tout{background:rgba(217,95,95,.15);color:var(--red)}
+    .ttr{background:rgba(196,149,53,.15);color:var(--accentlt)}
+    .ac{font-weight:700;font-variant-numeric:tabular-nums}
+    .note{background:rgba(249,115,22,.08);border:1px solid rgba(249,115,22,.3);border-radius:8px;padding:10px 16px;font-size:12px;color:#f97316;margin-bottom:20px}
+    @media(max-width:960px){.g21,.g11,.g3{grid-template-columns:1fr}.container{padding:16px}}
+  </style>
+</head>
+<body>
+<header>
+  <div class="logo">DSCR <span>Department</span></div>
+  <div class="badge">June 2026 &nbsp;·&nbsp; P&L Dashboard</div>
+</header>
+<div class="container">
+
+  <div class="note">⚠ Mercury Savings Transfer ($3,477.00) excluded from revenue — internal account transfer. Working Capital outflow ($5,000.00) included as operational expense.</div>
+
+  <!-- KPIs -->
+  <div class="slabel">Overview</div>
+  <div class="kpi-grid" style="margin-bottom:28px">
+    <div class="kpi ka"><div class="klbl">Gross Revenue</div><div class="kval">$22,179</div><div class="ksub">10 transactions · June 2026</div></div>
+    <div class="kpi"><div class="klbl">Sales Revenue</div><div class="kval">$22,160</div><div class="ksub">Title & loan closings</div></div>
+    <div class="kpi"><div class="klbl">Avg Deal</div><div class="kval">$4,292</div><div class="ksub">5 sales transactions</div></div>
+    <div class="kpi kr"><div class="klbl">Total Expenses</div><div class="kval">$22,344</div><div class="ksub">10 categories</div></div>
+    <div class="kpi kr"><div class="klbl">Net Profit</div><div class="kval">-$164</div><div class="ksub">-0.74% margin</div></div>
+    <div class="kpi"><div class="klbl">Payroll</div><div class="kval">$11,408</div><div class="ksub">51% of expenses</div></div>
+    <div class="kpi kw"><div class="klbl">Working Capital</div><div class="kval">$5,000</div><div class="ksub">22% of expenses</div></div>
+  </div>
+
+  <!-- Revenue breakdown + Expense donut -->
+  <div class="g21">
+    <div class="card">
+      <div class="ctitle">Revenue by Source</div>
+      <div style="position:relative;height:240px"><canvas id="revChart"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="ctitle">Expense Mix</div>
+      <div style="position:relative;height:240px"><canvas id="expDonut"></canvas></div>
+    </div>
+  </div>
+
+  <!-- Expense bar + Cashflow -->
+  <div class="g11">
+    <div class="card">
+      <div class="ctitle">Expenses by Category</div>
+      <div style="position:relative;height:260px"><canvas id="expBar"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="ctitle">Daily Cashflow — Money In vs Out</div>
+      <div style="position:relative;height:260px"><canvas id="cashflow"></canvas></div>
+    </div>
+  </div>
+
+  <!-- P&L Summary -->
+  <div class="slabel">Profit &amp; Loss Summary</div>
+  <div class="g3">
+    <div class="pnl-sec">
+      <div class="slabel" style="margin-bottom:10px">Revenue</div>
+      <div class="pi"><span>Guardian Title Guaranty</span><span class="pos">$9,000</span></div>
+      <div class="pi"><span>Advantage Title LLC (×2)</span><span class="pos">$5,495</span></div>
+      <div class="pi"><span>American Title Solutions</span><span class="pos">$3,552</span></div>
+      <div class="pi"><span>Scott M Kelly</span><span class="pos">$3,100</span></div>
+      <div class="pi"><span>Constructive Loans LLC</span><span class="pos">$1,013</span></div>
+      <div class="pi"><span>Other (cashback, refunds)</span><span class="pos">$20</span></div>
+      <div class="pi tot"><span>Gross Revenue</span><span class="pos">$22,179</span></div>
+    </div>
+    <div class="pnl-sec">
+      <div class="slabel" style="margin-bottom:10px">Expenses</div>
+      <div class="pi"><span>Payroll</span><span class="neg">-$11,408</span></div>
+      <div class="pi"><span>Working Capital</span><span class="neg">-$5,000</span></div>
+      <div class="pi"><span>Software &amp; Apps</span><span class="neg">-$3,448</span></div>
+      <div class="pi"><span>Other</span><span class="neg">-$1,033</span></div>
+      <div class="pi"><span>Meals</span><span class="neg">-$558</span></div>
+      <div class="pi"><span>Marketing</span><span class="neg">-$274</span></div>
+      <div class="pi"><span>Subscriptions</span><span class="neg">-$265</span></div>
+      <div class="pi"><span>Utilities</span><span class="neg">-$166</span></div>
+      <div class="pi"><span>Travel</span><span class="neg">-$155</span></div>
+      <div class="pi"><span>Processing Fees</span><span class="neg">-$38</span></div>
+      <div class="pi tot"><span>Total Expenses</span><span class="neg">-$22,344</span></div>
+    </div>
+    <div class="pnl-sec profit">
+      <div class="slabel" style="margin-bottom:10px">Net Result</div>
+      <div class="pi"><span>Gross Revenue</span><span class="pos">$22,179</span></div>
+      <div class="pi"><span>Total Expenses</span><span class="neg">-$22,344</span></div>
+      <div class="pi"><span>Profit Margin</span><span class="neg">-0.74%</span></div>
+      <div class="pi tot"><span>Net Profit / Loss</span><span class="neg">-$164</span></div>
+    </div>
+  </div>
+
+  <!-- Expense categories -->
+  <div class="slabel">Expense Breakdown by Category</div>
+  <div class="exp-grid">
+    <div class="ec">
+      <div class="eclbl">Payroll</div><div class="ectot" style="color:#d95f5f">-$11,407.84</div>
+      <div class="eitems">
+        <div class="erow"><span class="ename">Yazan Ghezlan</span><span class="eamt">$5,350.00</span></div>
+        <div class="erow"><span class="ename">Austin Atkins</span><span class="eamt">$2,510.40</span></div>
+        <div class="erow"><span class="ename">Sarah Lippert</span><span class="eamt">$1,099.00</span></div>
+        <div class="erow"><span class="ename">Payroll (Jun 15)</span><span class="eamt">$1,098.44</span></div>
+        <div class="erow"><span class="ename">Stacey Chehardy</span><span class="eamt">$1,350.00</span></div>
+      </div>
+    </div>
+    <div class="ec">
+      <div class="eclbl">Working Capital</div><div class="ectot" style="color:#f97316">-$5,000.00</div>
+      <div class="eitems">
+        <div class="erow"><span class="ename">Mercury (Jun 2)</span><span class="eamt">$5,000.00</span></div>
+      </div>
+    </div>
+    <div class="ec">
+      <div class="eclbl">Software &amp; Apps</div><div class="ectot" style="color:#9b7dd4">-$3,447.68</div>
+      <div class="eitems">
+        <div class="erow"><span class="ename">Intelleq LLC</span><span class="eamt">$1,300.00</span></div>
+        <div class="erow"><span class="ename">Zapier</span><span class="eamt">$656.85</span></div>
+        <div class="erow"><span class="ename">QuickBooks</span><span class="eamt">$535.58</span></div>
+        <div class="erow"><span class="ename">Google</span><span class="eamt">$451.73</span></div>
+        <div class="erow"><span class="ename">Typeform</span><span class="eamt">$129.00</span></div>
+        <div class="erow"><span class="ename">Anthropic Claude</span><span class="eamt">$109.75</span></div>
+        <div class="erow"><span class="ename">Others</span><span class="eamt">$264.77</span></div>
+      </div>
+    </div>
+    <div class="ec">
+      <div class="eclbl">Other</div><div class="ectot" style="color:#5b8fd4">-$1,032.60</div>
+      <div class="eitems">
+        <div class="erow"><span class="ename">Arive</span><span class="eamt">$614.49</span></div>
+        <div class="erow"><span class="ename">Premium Bureau In</span><span class="eamt">$326.51</span></div>
+        <div class="erow"><span class="ename">Gorilla Mind</span><span class="eamt">$53.90</span></div>
+        <div class="erow"><span class="ename">Experian</span><span class="eamt">$26.24</span></div>
+        <div class="erow"><span class="ename">Other</span><span class="eamt">$11.46</span></div>
+      </div>
+    </div>
+    <div class="ec">
+      <div class="eclbl">Meals</div><div class="ectot" style="color:#4ab3a0">-$558.17</div>
+      <div class="eitems">
+        <div class="erow"><span class="ename">Sauce Elote</span><span class="eamt">$213.09</span></div>
+        <div class="erow"><span class="ename">Tiagos Tacos</span><span class="eamt">$177.03</span></div>
+        <div class="erow"><span class="ename">Raising Cane's</span><span class="eamt">$168.05</span></div>
+      </div>
+    </div>
+    <div class="ec">
+      <div class="eclbl">Marketing</div><div class="ectot" style="color:#5cb87a">-$274.00</div>
+      <div class="eitems">
+        <div class="erow"><span class="ename">Webflow</span><span class="eamt">$106.46</span></div>
+        <div class="erow"><span class="ename">LinkedIn</span><span class="eamt">$76.81</span></div>
+        <div class="erow"><span class="ename">SquareSpace</span><span class="eamt">$43.90</span></div>
+        <div class="erow"><span class="ename">Shutterstock</span><span class="eamt">$31.83</span></div>
+        <div class="erow"><span class="ename">Canva</span><span class="eamt">$15.00</span></div>
+      </div>
+    </div>
+    <div class="ec">
+      <div class="eclbl">Subscriptions</div><div class="ectot" style="color:#c49535">-$264.62</div>
+      <div class="eitems">
+        <div class="erow"><span class="ename">Calendly</span><span class="eamt">$92.19</span></div>
+        <div class="erow"><span class="ename">Indeed</span><span class="eamt">$81.00</span></div>
+        <div class="erow"><span class="ename">Upwork (×2)</span><span class="eamt">$52.50</span></div>
+        <div class="erow"><span class="ename">Netflix</span><span class="eamt">$21.94</span></div>
+        <div class="erow"><span class="ename">IdentityIQ</span><span class="eamt">$16.99</span></div>
+      </div>
+    </div>
+    <div class="ec">
+      <div class="eclbl">Utilities</div><div class="ectot" style="color:#e8c06b">-$165.84</div>
+      <div class="eitems"><div class="erow"><span class="ename">T-Mobile</span><span class="eamt">$165.84</span></div></div>
+    </div>
+    <div class="ec">
+      <div class="eclbl">Travel</div><div class="ectot" style="color:#d4834b">-$155.00</div>
+      <div class="eitems"><div class="erow"><span class="ename">VIP Pedicabs</span><span class="eamt">$155.00</span></div></div>
+    </div>
+    <div class="ec">
+      <div class="eclbl">Processing Fees</div><div class="ectot" style="color:#9a9588">-$38.11</div>
+      <div class="eitems"><div class="erow"><span class="ename">Square / Stripe</span><span class="eamt">$38.11</span></div></div>
+    </div>
+  </div>
+
+  <!-- Combined transactions table -->
+  <div class="table-wrap">
+    <div class="thdr">
+      <div class="ctitle" style="margin:0">All Transactions</div>
+      <div style="font-size:12px;color:var(--muted)">58 entries · June 2026</div>
+    </div>
+    <table>
+      <thead><tr><th>Date</th><th>Description</th><th>Category</th><th>Type</th><th style="text-align:right">Amount</th></tr></thead>
+      <tbody id="txn-body"></tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+const C={gold:'#c49535',goldlt:'#e8c06b',green:'#5cb87a',red:'#d95f5f',teal:'#4ab3a0',blue:'#5b8fd4',purple:'#9b7dd4',orange:'#f97316',grid:'#48463e',tick:'#9a9588'};
+
+// Revenue by source
+new Chart(document.getElementById('revChart'),{type:'bar',data:{
+  labels:['Guardian Title','Advantage Title (×2)','American Title','Scott M Kelly','Constructive Loans','Other'],
+  datasets:[{data:[9000,5495,3552,3100,1012.50,19.51],backgroundColor:[C.goldlt,C.gold,C.green,C.teal,C.blue,C.purple],borderRadius:8}]
+},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>' $'+c.raw.toLocaleString()}}},scales:{x:{grid:{display:false},ticks:{color:C.tick,font:{size:11}}},y:{grid:{color:C.grid},ticks:{color:C.tick,callback:v=>'$'+(v/1000).toFixed(0)+'k'}}}}});
+
+// Expense donut
+new Chart(document.getElementById('expDonut'),{type:'doughnut',data:{
+  labels:['Payroll','Working Capital','Software','Other','Meals','Marketing','Subscriptions','Utilities','Travel','Processing'],
+  datasets:[{data:[11407.84,5000,3447.68,1032.60,558.17,274,264.62,165.84,155,38.11],backgroundColor:[C.red,C.orange,C.purple,C.blue,C.teal,C.green,C.gold,C.goldlt,'#d4834b','#9a9588'],borderWidth:0,hoverOffset:6}]
+},options:{responsive:true,maintainAspectRatio:false,cutout:'60%',plugins:{legend:{position:'bottom',labels:{color:C.tick,padding:8,font:{size:10},boxWidth:10}},tooltip:{callbacks:{label:c=>' $'+c.raw.toLocaleString()}}}}});
+
+// Expense bar
+new Chart(document.getElementById('expBar'),{type:'bar',data:{
+  labels:['Payroll','Working Capital','Software','Other','Meals','Marketing','Subs','Utilities','Travel','Processing'],
+  datasets:[{data:[11407.84,5000,3447.68,1032.60,558.17,274,264.62,165.84,155,38.11],backgroundColor:[C.red,C.orange,C.purple,C.blue,C.teal,C.green,C.gold,C.goldlt,'#d4834b','#9a9588'],borderRadius:6}]
+},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>' $'+c.raw.toLocaleString()}}},scales:{x:{grid:{display:false},ticks:{color:C.tick,font:{size:10}}},y:{grid:{color:C.grid},ticks:{color:C.tick,callback:v=>'$'+(v/1000).toFixed(0)+'k'}}}}});
+
+// Daily cashflow
+const inByDay={'01':5495,'02':3477,'11':3100,'12':3552,'15':16.49,'22':1012.50,'29':9003.52};
+const outByDay={'01':570.84,'02':6099,'03':40.09,'04':656.85,'05':35.10,'06':0,'07':95,'08':26.25,'12':185.45,'13':250,'14':120.71,'15':1813.93,'16':1372.83,'18':16.99,'20':155,'22':21.94,'23':18.69,'24':19.99,'25':1081.83,'26':836,'27':945.7,'29':7150};
+const days=[...new Set([...Object.keys(inByDay),...Object.keys(outByDay)])].sort((a,b)=>parseInt(a)-parseInt(b));
+new Chart(document.getElementById('cashflow'),{type:'bar',data:{
+  labels:days.map(d=>'Jun '+parseInt(d)),
+  datasets:[
+    {label:'Money In',data:days.map(d=>inByDay[d]||0),backgroundColor:'rgba(92,184,122,0.7)',borderRadius:4},
+    {label:'Money Out',data:days.map(d=>-(outByDay[d]||0)),backgroundColor:'rgba(217,95,95,0.7)',borderRadius:4}
+  ]
+},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{color:C.tick,font:{size:11}}},tooltip:{callbacks:{label:c=>' $'+Math.abs(c.raw).toLocaleString()}}},scales:{x:{grid:{display:false},ticks:{color:C.tick,font:{size:10}}},y:{grid:{color:C.grid},stacked:false,ticks:{color:C.tick,callback:v=>'$'+(Math.abs(v)/1000).toFixed(0)+'k'}}}}});
+
+// Transactions table
+const moneyIn=[
+  {date:'06/01',desc:'Advantage Title LLC',cat:'Sales',type:'in',amount:2695},
+  {date:'06/01',desc:'Advantage Title LLC',cat:'Sales',type:'in',amount:2800},
+  {date:'06/02',desc:'Mercury Savings Transfer',cat:'Transfer',type:'transfer',amount:3477},
+  {date:'06/11',desc:'Scott M Kelly',cat:'Sales',type:'in',amount:3100},
+  {date:'06/12',desc:'American Title Solutions',cat:'Sales',type:'in',amount:3552},
+  {date:'06/15',desc:'Mercury IO Cashback',cat:'Other Income',type:'in',amount:16.49},
+  {date:'06/22',desc:'Constructive Loans LLC',cat:'Sales',type:'in',amount:1012.50},
+  {date:'06/29',desc:'Guardian Title Guaranty',cat:'Services',type:'in',amount:9000},
+  {date:'06/29',desc:'Amazon',cat:'Other',type:'in',amount:3.23},
+  {date:'06/29',desc:'Amazon',cat:'Other',type:'in',amount:0.29},
+];
+const moneyOut=[
+  {date:'06/01',desc:'Google',cat:'Software & Apps',type:'out',amount:451.73},
+  {date:'06/01',desc:'Indeed',cat:'Subscriptions',type:'out',amount:81.00},
+  {date:'06/01',desc:'Square (Stripe fees)',cat:'Processing Fees',type:'out',amount:38.11},
+  {date:'06/02',desc:'Mercury Working Capital',cat:'Working Capital',type:'out',amount:5000},
+  {date:'06/02',desc:'Sarah Lippert',cat:'Payroll',type:'out',amount:1099},
+  {date:'06/02',desc:'Stacey Chehardy',cat:'Payroll',type:'out',amount:900},
+  {date:'06/02',desc:'Canva',cat:'Marketing',type:'out',amount:15},
+  {date:'06/03',desc:'Twilio',cat:'Software & Apps',type:'out',amount:40.09},
+  {date:'06/04',desc:'Zapier',cat:'Software & Apps',type:'out',amount:656.85},
+  {date:'06/05',desc:'Apple',cat:'Software & Apps',type:'out',amount:35.10},
+  {date:'06/07',desc:'Martin & Martin',cat:'Software & Apps',type:'out',amount:49},
+  {date:'06/07',desc:'Experian',cat:'Other',type:'out',amount:26.24},
+  {date:'06/07',desc:'Webflow',cat:'Marketing',type:'out',amount:19.76},
+  {date:'06/08',desc:'Upwork',cat:'Subscriptions',type:'out',amount:26.25},
+  {date:'06/12',desc:'Webflow',cat:'Marketing',type:'out',amount:86.70},
+  {date:'06/12',desc:'LinkedIn',cat:'Marketing',type:'out',amount:76.81},
+  {date:'06/12',desc:'Apple',cat:'Software & Apps',type:'out',amount:21.94},
+  {date:'06/13',desc:'Intelleq LLC',cat:'Software & Apps',type:'out',amount:250},
+  {date:'06/14',desc:'Anthropic Claude',cat:'Software & Apps',type:'out',amount:109.75},
+  {date:'06/14',desc:'GoDaddy',cat:'Software & Apps',type:'out',amount:10.96},
+  {date:'06/15',desc:'Payroll',cat:'Payroll',type:'out',amount:1098.44},
+  {date:'06/15',desc:'Austin Atkins',cat:'Payroll',type:'out',amount:710.40},
+  {date:'06/15',desc:'Mercury',cat:'Other',type:'out',amount:5.49},
+  {date:'06/16',desc:'Stacey Chehardy',cat:'Payroll',type:'out',amount:450},
+  {date:'06/16',desc:'T-Mobile',cat:'Utilities',type:'out',amount:165.84},
+  {date:'06/16',desc:'Typeform',cat:'Software & Apps',type:'out',amount:129},
+  {date:'06/16',desc:'Calendly',cat:'Subscriptions',type:'out',amount:92.19},
+  {date:'06/16',desc:'SquareSpace',cat:'Marketing',type:'out',amount:43.90},
+  {date:'06/16',desc:'Phantomwriter.io',cat:'Software & Apps',type:'out',amount:49},
+  {date:'06/16',desc:'Premium Bureau In',cat:'Other',type:'out',amount:326.51},
+  {date:'06/16',desc:'Moneysensei.com',cat:'Other',type:'out',amount:5.97},
+  {date:'06/18',desc:'IdentityIQ',cat:'Subscriptions',type:'out',amount:16.99},
+  {date:'06/20',desc:'VIP Pedicabs',cat:'Travel',type:'out',amount:155},
+  {date:'06/22',desc:'Netflix',cat:'Subscriptions',type:'out',amount:21.94},
+  {date:'06/23',desc:'Zoom',cat:'Software & Apps',type:'out',amount:18.69},
+  {date:'06/24',desc:'GoDaddy',cat:'Software & Apps',type:'out',amount:19.99},
+  {date:'06/25',desc:'Intelleq LLC',cat:'Software & Apps',type:'out',amount:1050},
+  {date:'06/25',desc:'Shutterstock',cat:'Marketing',type:'out',amount:31.83},
+  {date:'06/26',desc:'Arive',cat:'Other',type:'out',amount:614.49},
+  {date:'06/26',desc:'Raising Cane Chicken',cat:'Meals',type:'out',amount:168.05},
+  {date:'06/26',desc:'Gorilla Mind',cat:'Other',type:'out',amount:53.90},
+  {date:'06/01',desc:'Upwork',cat:'Subscriptions',type:'out',amount:26.25},
+  {date:'06/27',desc:'QuickBooks',cat:'Software & Apps',type:'out',amount:535.58},
+  {date:'06/27',desc:'Sauce Elote',cat:'Meals',type:'out',amount:213.09},
+  {date:'06/27',desc:'Tiagos Tacos',cat:'Meals',type:'out',amount:177.03},
+  {date:'06/27',desc:'Liveplan',cat:'Software & Apps',type:'out',amount:20},
+  {date:'06/29',desc:'Yazan Ghezlan',cat:'Payroll',type:'out',amount:5350},
+  {date:'06/29',desc:'Austin Atkins',cat:'Payroll',type:'out',amount:1800},
+];
+
+const allTxns=[...moneyIn,...moneyOut].sort((a,b)=>parseInt(a.date.split('/')[1])-parseInt(b.date.split('/')[1]));
+const tbody=document.getElementById('txn-body');
+document.querySelector('.thdr div:last-child').textContent=allTxns.length+' entries · June 2026';
+allTxns.forEach(t=>{
+  const tr=document.createElement('tr');
+  const cls=t.type==='in'?'pos':t.type==='transfer'?'neu':'neg';
+  const prefix=t.type==='in'?'+':t.type==='transfer'?'~':'-';
+  const tagCls=t.type==='in'?'tin':t.type==='transfer'?'ttr':'tout';
+  const tagTxt=t.type==='in'?'IN':t.type==='transfer'?'TRANSFER':'OUT';
+  tr.innerHTML=`<td style="color:var(--muted)">${t.date}</td><td style="font-weight:600">${t.desc}</td><td style="color:var(--muted)">${t.cat}</td><td><span class="tag ${tagCls}">${tagTxt}</span></td><td class="ac ${cls}" style="text-align:right">${prefix}$${t.amount.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2})}</td>`;
+  tbody.appendChild(tr);
+});
+</script>
+</body>
+</html>
